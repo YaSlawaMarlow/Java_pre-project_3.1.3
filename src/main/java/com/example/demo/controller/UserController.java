@@ -27,16 +27,20 @@ public class UserController {
 
     @GetMapping("/")
     public String loginPage() {
-        return "redirect:/login";
+        return "login";
+    }
+
+    @GetMapping("/login")
+    public String loginPage2() {
+        return "login";
     }
 
     /////////////////////////////////////////////////////////////////////
-
     @GetMapping("/user")
     public String userPage(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", user.getRoles());
-        return "/show";
+        return "userPage";
     }
 
     @GetMapping(value = "/user/{id}")
@@ -44,32 +48,35 @@ public class UserController {
         User user = userService.getUser(id);
         model.addAttribute("user", user);
         model.addAttribute("role", user.getRoles());
-        return "show";
+        return "userPage";
     }
 
+
     @DeleteMapping("/user/delete/{id}")
-    public String deleteU(@PathVariable("id") int id) {
+    public String deleteU2(@PathVariable("id") int id) {
         userService.deleteUser(id);
-        return "redirect:/logout";
+        return "redirect:/login";
     }
 
     ////////////////////
-
     @GetMapping(value = "/admin")
-    public String allUsers(Model model) {
-        model.addAttribute("getUsers", userService.getAllUsers());
-        return "all";
+    public String adminPage(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
+        model.addAttribute("allRoles", user.getRoles());
+        model.addAttribute("allUsers", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getRoles());
+        return "adminPage";
     }
 
     @GetMapping("/admin/new")
     public String saveUser(Model model) {
         model.addAttribute("user", new User());
-        model.addAttribute("roles", roleService.getRoles());///
+        model.addAttribute("roles", roleService.getRoles());
         return "new";
     }
 
     @PostMapping("/admin/add")
-    public String create(@ModelAttribute("user") User user, @RequestParam(value = "checkBoxRoles") String[] checkBoxRoles) {
+    public String createUser(@ModelAttribute("user") User user, @RequestParam(value = "checkBoxRoles") String[] checkBoxRoles) {
         Set<Role> roleSet = new HashSet<>();
         for (String role : checkBoxRoles) {
             roleSet.add(roleService.getRoleByName(role));
@@ -86,7 +93,7 @@ public class UserController {
         return "edit";
     }
 
-    @PatchMapping("/admin/edit")
+    @PatchMapping("/admin/edit/{id}")
     public String update(@ModelAttribute("user") User user, @RequestParam(value = "checkBoxRoles") String[] checkBoxRoles) {
         Set<Role> roleSet = new HashSet<>();
         for (String role : checkBoxRoles) {
@@ -97,8 +104,9 @@ public class UserController {
         return "redirect:/admin";
     }
 
+
     @DeleteMapping("/admin/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete2(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }

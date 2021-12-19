@@ -43,8 +43,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByName(String name) {
-        return em.createQuery("select u from User u where u.name=:name",
-                User.class).setParameter("name", name).getSingleResult();
+    public User getUserByName(String email) {
+        return em.createQuery("select u from User u where u.email=:email",
+                User.class).setParameter("email", email).getSingleResult();
     }
 }

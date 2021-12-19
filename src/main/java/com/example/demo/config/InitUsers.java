@@ -41,14 +41,18 @@ public class InitUsers {
         rolesForUser.add(roleService.getRoleByName("ROLE_USER"));
 
         admin.setName("admin");
+        admin.setLastName("adminov");
         admin.setPassword("admin");
         admin.setAge(20);
         admin.setRoles(rolesForAdmin);
+        admin.setEmail("admin@mail.ru");
         userService.saveUser(admin);
 
         user.setName("user");
         user.setPassword("user");
+        user.setLastName("usernov");
         user.setAge(20);
+        user.setEmail("user@mail.ru");
         user.setRoles(rolesForUser);
         userService.saveUser(user);
     }
